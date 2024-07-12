@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:purie_ui/app/common/common.dart';
 
+import '../../common/colors.dart';
 import '../../controller/init.dart';
 import '../bottom_nav/bottom_main.dart';
 import 'order_detail.dart';
@@ -25,21 +27,25 @@ class _MyOrderState extends State<MyOrder> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.mainColor,
         automaticallyImplyLeading: false,
         leading: IconButton(
-            onPressed: () async {
-              // await init.checkout();
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.keyboard_backspace,
-              color: kcolor1,
-            )),
+          onPressed: () async {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_sharp,
+            color:Colors.white,
+          ),
+        ),
         centerTitle: true,
         title: Text(
           'My Orders',
-          style: TextStyle(color: kcolor1),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontFamily: "poppinssemibold",
+          ),
         ),
       ),
       body: SingleChildScrollView(

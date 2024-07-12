@@ -1,22 +1,25 @@
 class AllDeliveryAddressModel {
   bool? status;
+  String? msg;
   List<Addresses>? addresses;
 
-  AllDeliveryAddressModel({this.status, this.addresses});
+  AllDeliveryAddressModel({this.status, this.msg, this.addresses});
 
   AllDeliveryAddressModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
+    msg = json['msg'];
     if (json['addresses'] != null) {
       addresses = <Addresses>[];
       json['addresses'].forEach((v) {
-        addresses!.add(new Addresses.fromJson(v));
+        addresses!.add(Addresses.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = this.status;
+    data['msg'] = this.msg;
     if (this.addresses != null) {
       data['addresses'] = this.addresses!.map((v) => v.toJson()).toList();
     }
@@ -50,7 +53,7 @@ class Addresses {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['del_ad_id'] = this.delAdId;
     data['user_id'] = this.userId;
     data['user_address'] = this.userAddress;

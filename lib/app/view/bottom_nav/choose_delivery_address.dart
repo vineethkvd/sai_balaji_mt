@@ -11,6 +11,7 @@ import '../../controller/registration_controller.dart';
 
 class ChooseDeliveryAddress extends StatefulWidget {
   final String pinCode;
+
   const ChooseDeliveryAddress({Key? key, required this.pinCode})
       : super(key: key);
 
@@ -21,7 +22,6 @@ class ChooseDeliveryAddress extends StatefulWidget {
 class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
   final RegistrationController registrationController =
       Get.put(RegistrationController());
-
   @override
   void initState() {
     super.initState();
@@ -69,7 +69,7 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Text(
                     'Choose delivery address ',
                     textAlign: TextAlign.center,
@@ -79,32 +79,142 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                       fontFamily: "PoppinsSemibold",
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Expanded(
-                    child: ListView(
-                      children: registrationController
-                          .allDeliveryAddressModel.value.addresses!
-                          .where((address) => address.pincode == widget.pinCode)
-                          .map((address) => RadioListTile<String>(
-                                title: Text(
-                                  address.userAddress ?? '',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: "PoppinsRegular",
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                value: address.delAdId!,
-                                groupValue: registrationController
-                                    .selectedAddressId.value,
-                                onChanged: (String? value) {
-                                  registrationController
-                                      .selectedAddressId.value = value!;
-                                },
-                                activeColor: AppColor.mainColor,
-                              ))
-                          .toList(),
-                    ),
+                    child: registrationController
+                            .allDeliveryAddressModel.value.addresses!.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No addresses available",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontFamily: "PoppinsRegular",
+                              ),
+                            ),
+                          )
+                        : ListView(
+                            children: registrationController
+                                .allDeliveryAddressModel.value.addresses!
+                                .where((address) =>
+                                    address.pincode == widget.pinCode)
+                                .map((address) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Card(
+                                        elevation: 3,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: RadioListTile<String>(
+                                                  title: Column(
+                                                    children: [
+                                                      Text(
+                                                        address.userAddress ??
+                                                            '',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        maxLines:
+                                                            registrationController
+                                                                    .isReadMore
+                                                                    .value
+                                                                ? 10
+                                                                : 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontFamily:
+                                                              "PoppinsRegular",
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          registrationController
+                                                                  .isReadMore
+                                                                  .value =
+                                                              !registrationController
+                                                                  .isReadMore
+                                                                  .value;
+                                                        },
+                                                        child: Text(
+                                                            registrationController
+                                                                    .isReadMore
+                                                                    .value
+                                                                ? "Read less"
+                                                                : "Read more"),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  value: address.delAdId!,
+                                                  groupValue:
+                                                      registrationController
+                                                          .selectedAddressId
+                                                          .value,
+                                                  onChanged: (String? value) {
+                                                    registrationController
+                                                        .selectedAddressId
+                                                        .value = value!;
+                                                  },
+                                                  activeColor:
+                                                      AppColor.mainColor,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: Icon(Icons.delete,
+                                                    color: Colors.red),
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: Text(
+                                                          "Delete Address"),
+                                                      content: Text(
+                                                          "Are you sure you want to delete this address?"),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            registrationController
+                                                                .deleteAddress(
+                                                                    addressId:
+                                                                        address
+                                                                            .delAdId!)
+                                                                .then((_) {
+                                                              registrationController
+                                                                  .fetchDeliveryAddress();
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text("Yes"),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text("No"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -138,7 +248,7 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                                     },
                                     child: Container(
                                       alignment: Alignment.center,
-                                      child: Padding(
+                                      child: const Padding(
                                         padding: EdgeInsets.all(8.0),
                                         child: Text(
                                           'Add new address',
@@ -155,7 +265,7 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15.0),
@@ -200,7 +310,7 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                                                 ),
                                               )
                                             : Text(
-                                                'Save',
+                                                'Next',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontFamily: "PoppinsRegular",

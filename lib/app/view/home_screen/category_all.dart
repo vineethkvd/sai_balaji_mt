@@ -37,9 +37,6 @@ class _CategoryAllState extends State<CategoryAll> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-          child: DrawerWidget(),
-        ),
         backgroundColor: AppColor.secondarycolor,
         appBar: AppBar(
           elevation: 0,
@@ -56,6 +53,7 @@ class _CategoryAllState extends State<CategoryAll> {
           // ),
           backgroundColor:  AppColor.mainColor,
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text(
             'Category',
             style: TextStyle(
@@ -72,82 +70,73 @@ class _CategoryAllState extends State<CategoryAll> {
                   padding: const EdgeInsets.only(top: 300),
                   child: Center(child: CircularProgressIndicator()),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 5,
-                          mainAxisExtent: 150,
-                          childAspectRatio: 1 / 1.1),
-                      itemCount: init.mostppcdata?.data.length ?? 0,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () async {
-                            await init.productbysubcatecall(
-                                init.mostppcdata!.data[index].catId);
-                            Get.to(
-                              transition: Transition.leftToRight,
-                              preventDuplicates: true,
-                              SingleCategory(
-                                topic: init.mostppcdata!.data[index].catName,
-                              ),
-                            );
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => SingleCategory(
-                            //             topic: init
-                            //                 .mostppcdata!.data[index].catName,
-                            //           )),
-                            // );
-                          },
-                          child: Card(
-                            color: AppColor.primarycolor,
-                            elevation: 5,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width / 7,
-                              // height: MediaQuery.of(context).size.height / 15,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 15),
-                                    child: CircleAvatar(
-                                        radius: 45,
-                                        backgroundImage: NetworkImage(
-                                            API().imagebaseURL +
-                                                init.mostppcdata!.data[index]
-                                                    .catImg)
-                                        // child: Column(children: [
-                                        //   // Image.network(API().imagebaseURL +
-                                        //   //     init.mostppcdata!.data[index].catImg),
-                                        // ]),
-                                        ),
-                                  ),
-                                  kbox10,
-                                  Column(
-                                    children: [
-                                      Text(
-                                        init.mostppcdata!.data[index].catName,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14.sp,
-                                          fontFamily: "poppinssemibold",
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+              :Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                mainAxisExtent: 200,
+                childAspectRatio: 0.8,
+              ),
+              itemCount: init.mostppcdata?.data.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () async {
+                    await init.productbysubcatecall(init.mostppcdata!.data[index].catId);
+                    Get.to(
+                      transition: Transition.leftToRight,
+                      preventDuplicates: true,
+                      SingleCategory(
+                        topic: init.mostppcdata!.data[index].catName,
+                      ),
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 5,
+                    shadowColor: Colors.grey.withOpacity(0.2),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient: LinearGradient(
+                          colors: [AppColor.primarycolor.withOpacity(0.7), AppColor.primarycolor],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 45,
+                            backgroundImage: NetworkImage(
+                              API().imagebaseURL + init.mostppcdata!.data[index].catImg,
                             ),
                           ),
-                        );
-                      }),
-                ),
+                          SizedBox(height: 10),
+                          Text(
+                            init.mostppcdata!.data[index].catName,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.sp,
+                              fontFamily: "poppinssemibold",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
         ])));
   }
 }

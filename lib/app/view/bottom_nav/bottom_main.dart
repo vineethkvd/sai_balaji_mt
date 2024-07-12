@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:purie_ui/app/common/colors.dart';
 import 'package:purie_ui/app/view/bottom_nav/cart_bottom_nav.dart';
 import 'package:purie_ui/app/view/bottom_nav/notification.dart';
@@ -10,6 +12,8 @@ import 'package:purie_ui/app/view/bottom_nav/shop_bottom_nav.dart';
 import 'package:purie_ui/app/view/home_screen/home_screen.dart';
 
 import '../../common/common.dart';
+import '../../controller/init.dart';
+import '../drawer/drawer.dart';
 import '../home_screen/category_all.dart';
 
 enum ThemeStyle {
@@ -31,12 +35,10 @@ class _BottomsheetState extends State<Bottomsheet> {
     // MyNotification(),
     ProfileBottomNav()
   ];
-
   void onTap(int index) {
     _currentIndex = index;
     setState(() {});
   }
-
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -46,12 +48,13 @@ class _BottomsheetState extends State<Bottomsheet> {
       splitScreenMode: true,
     );
     return Scaffold(
-      // extendBody for floating bar get better perfomance
+      drawer: DrawerWidget(),
       extendBody: true,
       backgroundColor: Colors.white,
       // appBar: AppBar(
       //   title: Text('wakkas'),
       // ),
+
       body: pages[_currentIndex],
       bottomNavigationBar: _buildBottomNavigationBar(),
     );

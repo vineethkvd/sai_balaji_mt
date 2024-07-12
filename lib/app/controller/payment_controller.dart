@@ -49,7 +49,7 @@ class PaymentController extends GetxController with BaseController {
 
     if (data['status'] == true) {
       bankDetailsModel.value = BankDetailsModel.fromJson(data);
-      Fluttertoast.showToast(msg: data['msg']);
+      // Fluttertoast.showToast(msg: data['msg']);
     } else {
       Fluttertoast.showToast(msg: data['msg']);
     }

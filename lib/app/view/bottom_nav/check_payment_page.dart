@@ -50,7 +50,7 @@ class _CheckPaymentPageState extends State<CheckPaymentPage> {
                 onPressed: () {
                   Get.back();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   color: Colors.white,
                 )),
@@ -89,21 +89,21 @@ class _CheckPaymentPageState extends State<CheckPaymentPage> {
                           fontFamily: "poppinsSemibold",
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _customTextField(
                         labelTxt: "Amount",
                         hintTxt: "Enter amount",
                         controller: paymentController.amountCheckPayment,
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _customTextField(
                         labelTxt: "Check Number",
                         hintTxt: "Enter check number",
                         controller: paymentController.checkNumber,
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
                         'Upload check image',
                         textAlign: TextAlign.center,

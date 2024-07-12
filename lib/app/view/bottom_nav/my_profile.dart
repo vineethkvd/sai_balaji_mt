@@ -43,7 +43,7 @@ class _MyProfileState extends State<MyProfile> {
             automaticallyImplyLeading: false,
             leading: IconButton(
               onPressed: () async {
-                Get.to(Bottomsheet());
+                Get.back();
               },
               icon: const Icon(
               Icons.arrow_back_sharp,

@@ -37,20 +37,24 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
 
   call() {
     registrationController.fetchProfile().then((_) {
-      registrationController.nameController.text =
-          registrationController.profileModel.value?.data?.userName ?? '';
-      registrationController.emailController.text =
-          registrationController.profileModel.value?.data?.userEmailid ?? '';
-      registrationController.phoneController.text =
-          registrationController.profileModel.value?.data?.userMobileno ?? '';
-      registrationController.flatNoController.text =
-          registrationController.profileModel.value?.data?.userFlatNum ?? '';
-      registrationController.townController.text =
-          registrationController.profileModel.value?.data?.userTown ?? '';
-      registrationController.phoneController.text =
-          registrationController.profileModel.value?.data?.userMobileno ?? '';
+      if (widget.pinCode ==
+          registrationController.profileModel.value?.data?.userPincode) {
+        registrationController.nameController.text =
+            registrationController.profileModel.value?.data?.userName ?? '';
+        registrationController.emailController.text =
+            registrationController.profileModel.value?.data?.userEmailid ?? '';
+        registrationController.phoneController.text =
+            registrationController.profileModel.value?.data?.userMobileno ?? '';
+        registrationController.flatNoController.text =
+            registrationController.profileModel.value?.data?.userFlatNum ?? '';
+        registrationController.townController.text =
+            registrationController.profileModel.value?.data?.userTown ?? '';
+        registrationController.phoneController.text =
+            registrationController.profileModel.value?.data?.userMobileno ?? '';
+        registrationController.phoneController.text =
+            registrationController.profileModel.value?.data?.userLandMark ?? '';
+      }
     });
-    setState(() {});
   }
 
   @override
@@ -510,81 +514,6 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
                                   keyboardType: TextInputType.text,
                                 ),
                                 SizedBox(height: 12),
-                                Obx(
-                                  () => Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      border: Border.all(
-                                          color: const Color(0xffd9d9d9)),
-                                    ),
-                                    height: 50,
-                                    child: DropdownButton<String>(
-                                      dropdownColor: Colors.white,
-                                      underline: Container(),
-                                      value: registrationController
-                                              .selectedType.value.isEmpty
-                                          ? null
-                                          : registrationController
-                                              .selectedType.value,
-                                      hint: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Type',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontFamily: "poppinsRegular",
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      isExpanded: true,
-                                      iconSize: 30.0,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: "poppinsRegular",
-                                        color: Colors.black,
-                                      ),
-                                      items: registrationController.type
-                                          .map((type) {
-                                        return DropdownMenuItem<String>(
-                                          value: type,
-                                          onTap: () {
-                                            registrationController.selectedType
-                                                .value = type.toString();
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Center(
-                                              child: Text(
-                                                type,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: "poppinsRegular",
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {},
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 12),
                                 Center(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15.0),
@@ -654,10 +583,6 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
                                                 .isEmpty) {
                                               Fluttertoast.showToast(
                                                   msg: 'Please enter landmark');
-                                            } else if (registrationController
-                                                .selectedType.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                  msg: 'Please enter type');
                                             } else {
                                               addressModel = AddressModel(
                                                 name: registrationController
@@ -685,13 +610,19 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
                                               );
                                               var result =
                                                   addressModel?.toJson();
+                                              var address =
+                                                  "${registrationController.nameController.text}, ${registrationController.flatNoController.text}, ${registrationController.townController.text}, ${registrationController.societyAreaController.text}, ${registrationController.selectedCountryName.value}, ${registrationController.selectedStateName.value}, ${registrationController.selectedCityName.value}, ${registrationController.landMarkController.text} .\nPhone number: ${registrationController.phoneController.text}\nPincode: ${registrationController.pinCodeController.text}\nEmail: ${registrationController.emailController.text}";
                                               registrationController
                                                   .addDeliveryAddress(
-                                                      address: "$result",
-                                                      type:
+                                                      address: address,
+                                                      deliveryMobile:
                                                           registrationController
-                                                              .selectedType
-                                                              .value)
+                                                              .phoneController
+                                                              .text,
+                                                      pinCode:
+                                                          registrationController
+                                                              .pinCodeController
+                                                              .text)
                                                   .then((_) {
                                                 if (registrationController
                                                         .deliveryAddressModel
@@ -700,7 +631,9 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
                                                   registrationController
                                                       .clearFields();
                                                   Get.to(
-                                                       ChooseDeliveryAddress(pinCode: widget.pinCode),
+                                                      ChooseDeliveryAddress(
+                                                          pinCode:
+                                                              widget.pinCode),
                                                       transition:
                                                           Transition.native);
                                                 }

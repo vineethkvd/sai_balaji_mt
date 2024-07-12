@@ -9,14 +9,14 @@ import '../../common/colors.dart';
 import '../../common/common.dart';
 import '../../controller/init.dart';
 
-class policy extends StatefulWidget {
-  const policy({super.key});
+class Policy extends StatefulWidget {
+  const Policy({super.key});
 
   @override
-  State<policy> createState() => _policyState();
+  State<Policy> createState() => _PolicyState();
 }
 
-class _policyState extends State<policy> {
+class _PolicyState extends State<Policy> {
   InitCon init = Get.put(InitCon());
 
   callapi() async {
@@ -35,31 +35,26 @@ class _policyState extends State<policy> {
     return Scaffold(
       backgroundColor: AppColor.secondarycolor,
       appBar: AppBar(
-        elevation: 2,
+        elevation: 0,
+        backgroundColor: AppColor.mainColor,
+        automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
             Get.back();
           },
           icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColor.mainColor,
+            Icons.arrow_back_sharp,
+            color:Colors.white,
           ),
         ),
-        backgroundColor: AppColor.secondarycolor,
-        title: Center(
-          child: Title(
-              color: kcolor1,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 50),
-                child: Text(
-                  'Privacy policy',
-                  style: TextStyle(
-                    color: AppColor.mainColor,
-                    fontSize: 20.sp,
-                    fontFamily: "poppinssemibold",
-                  ),
-                ),
-              )),
+        centerTitle: true,
+        title: Text(
+          'Privacy Policy',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontFamily: "poppinssemibold",
+          ),
         ),
       ),
       body: SingleChildScrollView(

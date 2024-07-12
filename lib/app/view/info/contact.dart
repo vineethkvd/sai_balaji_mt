@@ -28,31 +28,27 @@ class _ContactState extends State<Contact> {
     return Scaffold(
       backgroundColor: AppColor.secondarycolor,
       appBar: AppBar(
-        elevation: 2,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+
         leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_backspace,
+            size: 20,
+          ),
           onPressed: () {
             Get.back();
           },
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColor.mainColor,
-          ),
         ),
-        backgroundColor: AppColor.secondarycolor,
-        title: Center(
-          child: Title(
-              color: kcolor1,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 50),
-                child: Text(
-                  'Contact us',
-                  style: TextStyle(
-                    color: AppColor.mainColor,
-                    fontSize: 20.sp,
-                    fontFamily: "poppinssemibold",
-                  ),
-                ),
-              )),
+        backgroundColor:  AppColor.mainColor,
+        centerTitle: true,
+        title: Text(
+          'Contact Us',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontFamily: "poppinssemibold",
+          ),
         ),
       ),
       body: Padding(

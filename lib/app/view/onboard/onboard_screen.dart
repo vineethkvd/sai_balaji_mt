@@ -11,7 +11,7 @@ import '../../controller/init.dart';
 import '../login/login_screen.dart';
 
 class OnBoarding extends StatefulWidget {
-  const OnBoarding({super.key});
+  const OnBoarding({Key? key}) : super(key: key);
 
   @override
   State<OnBoarding> createState() => _OnBoardingState();
@@ -39,76 +39,89 @@ class _OnBoardingState extends State<OnBoarding> {
 
     return Scaffold(
       backgroundColor: AppColor.secondarycolor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: OnBoard(
-          pageController: _pageController,
-          onSkip: () {
-            // print('skipped');
-          },
-          onDone: () {
-            // print('done tapped');
-            GetStorage().write('onboarding', true);
-            Get.to(LoginScreen());
-          },
-          onBoardData: onBoardData,
-          titleStyles: TextStyle(
-            color: AppColor.mainColor,
-            fontSize: 18.sp,
-            fontFamily: "poppinssemibold",
-            letterSpacing: 0.15,
-          ),
-          descriptionStyles: TextStyle(
-            fontSize: 14.sp,
-            color: AppColor.txtColorMain,
-            fontFamily: "poppinsregular",
-          ),
-          pageIndicatorStyle: PageIndicatorStyle(
-            width: 100.w,
-            inactiveColor: AppColor.mainColor,
-            activeColor: AppColor.mainColor,
-            inactiveSize: Size(8.w, 8.h),
-            activeSize: Size(12.w, 12.h),
-          ),
-          skipButton: TextButton(
-            onPressed: () {
+      body: Container(
+        decoration: BoxDecoration(
+          color: AppColor.secondarycolor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: OnBoard(
+            pageController: _pageController,
+            onSkip: () {
+              // print('skipped');
+            },
+            onDone: () {
+              // print('done tapped');
               GetStorage().write('onboarding', true);
               Get.to(LoginScreen());
             },
-            child: Text(
-              "Skip",
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontFamily: "poppinssemibold",
-                color: AppColor.mainColor,
+            onBoardData: onBoardData,
+            titleStyles: TextStyle(
+              color: AppColor.mainColor,
+              fontSize: 18.sp,
+              fontFamily: "poppinssemibold",
+              letterSpacing: 0.15,
+            ),
+            descriptionStyles: TextStyle(
+              fontSize: 14.sp,
+              color: AppColor.txtColorMain,
+              fontFamily: "poppinsregular",
+            ),
+            pageIndicatorStyle: PageIndicatorStyle(
+              width: 100.w,
+              inactiveColor: AppColor.mainColor,
+              activeColor: AppColor.mainColor,
+              inactiveSize: Size(8.w, 8.h),
+              activeSize: Size(12.w, 12.h),
+            ),
+            skipButton: TextButton(
+              onPressed: () {
+                GetStorage().write('onboarding', true);
+                Get.to(LoginScreen());
+              },
+              child: Text(
+                "Skip",
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontFamily: "poppinssemibold",
+                  color: AppColor.mainColor,
+                ),
               ),
             ),
-          ),
-          nextButton: OnBoardConsumer(
-            builder: (context, ref, child) {
-              final state = ref.watch(onBoardStateProvider);
-              return InkWell(
-                onTap: () => _onNextTap(state),
-                child: Container(
-                  width: 180.w,
-                  height: 50.h,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.mainColor,
-                  ),
-                  child: Text(
-                    state.isLastPage ? "Done" : "Next",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontFamily: "poppinssemibold",
+            nextButton: OnBoardConsumer(
+              builder: (context, ref, child) {
+                final state = ref.watch(onBoardStateProvider);
+                return InkWell(
+                  onTap: () => _onNextTap(state),
+                  child: Container(
+                    width: 180.w,
+                    height: 50.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.mainColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      state.isLastPage ? "Done" : "Next",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontFamily: "poppinssemibold",
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -137,14 +150,15 @@ class _OnBoardingState extends State<OnBoarding> {
     const OnBoardModel(
       title: "Quality, Traceability, Sustainability",
       description:
-          "Welcome to our fresh seafood delivery app! We prioritize quality traceability and sustainability, ensuring every piece of seafood you receive is fresh, safe, and responsibly sourced. Our transparent supply chain allows you to trace the journey of your seafood from ocean to plate, supporting sustainable fishing practices and healthy marine ecosystems. Enjoy the finest seafood with peace of mind, knowing you're making a positive impact on our planet.",
+      "Welcome to our fresh seafood delivery app! We prioritize quality traceability and sustainability, ensuring every piece of seafood you receive is fresh, safe, and responsibly sourced. Our transparent supply chain allows you to trace the journey of your seafood from ocean to plate, supporting sustainable fishing practices and healthy marine ecosystems. Enjoy the finest seafood with peace of mind, knowing you're making a positive impact on our planet.",
       imgUrl: "assets/images/onboard2.png",
     ),
     const OnBoardModel(
       title: "Instant Food",
       description:
-          "Fish are frozen to preserve their freshness, flavor, and nutritional value. Freezing fish halts the growth of bacteria and other microorganisms, preventing spoilage and extending the shelf life. It allows fish to be transported over long distances without losing quality, ensuring that consumers receive fresh-tasting seafood even if it’s not locally sourced. Additionally, freezing helps to maintain the texture and moisture of the fish, making it a reliable method to deliver high-quality seafood year-round.",
+      "Fish are frozen to preserve their freshness, flavor, and nutritional value. Freezing fish halts the growth of bacteria and other microorganisms, preventing spoilage and extending the shelf life. It allows fish to be transported over long distances without losing quality, ensuring that consumers receive fresh-tasting seafood even if it’s not locally sourced. Additionally, freezing helps to maintain the texture and moisture of the fish, making it a reliable method to deliver high-quality seafood year-round.",
       imgUrl: "assets/images/onboard3.png",
     ),
   ];
 }
+

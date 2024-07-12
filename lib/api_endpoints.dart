@@ -38,5 +38,6 @@ class API {
   static String userRegister = "register";
   String getBank = "get_bank";
   String deliveryAddress = "delivery_address";
+  String deleteDelAddress = "delete_deladdress";
 
 }

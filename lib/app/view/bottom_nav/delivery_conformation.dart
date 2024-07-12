@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../api_endpoints.dart';
 import '../../common/colors.dart';
 import '../../controller/registration_controller.dart';
 import '../bottom_nav/payment_options.dart';
@@ -15,12 +16,13 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   final RegistrationController registrationController =
-      Get.put(RegistrationController());
+  Get.put(RegistrationController());
 
   @override
   void initState() {
     super.initState();
     fetchAddresses();
+    registrationController.fetchCartData();
   }
 
   Future<void> fetchAddresses() async {
@@ -79,29 +81,244 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.all(15.0),
-                    children: [
-                      Text(
-                        'Delivery address',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: AppColor.mainColor,
-                          fontSize: 16.sp,
-                          fontFamily: "poppinsSemibold",
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
-                      Obx(() => Text(
-                            "${registrationController.currentAddress.value}",
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delivery address',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: AppColor.mainColor,
+                                    fontSize: 16.sp,
+                                    fontFamily: "poppinsSemibold",
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.black54,
+                                  thickness: 1,
+                                ),
+                                Obx(() => Text(
+                                  "${registrationController.currentAddress.value}",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13.sp,
+                                    fontFamily: "poppinsRegular",
+                                  ),
+                                ))
+                              ]),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Product details',
+                            textAlign: TextAlign.left,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: AppColor.mainColor,
                               fontSize: 16.sp,
-                              fontFamily: "poppinsRegular",
+                              fontFamily: "poppinsSemibold",
                             ),
-                          ))
-                    ],
+                          ),
+                          const Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                          Obx(() {
+                            if (registrationController.isLoading.value) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            if (registrationController.cartdata.value.data.isEmpty) {
+                              return const Center(child: Text('No items in cart'));
+                            }
+                            return Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: registrationController.cartdata.value.data.length,
+                                itemBuilder: (context, index) {
+                                  var item = registrationController.cartdata.value.data[index];
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context).size.width + 30,
+                                          height: 80,
+                                          child: Card(
+                                            elevation: 2,
+                                            color: AppColor.primarycolor,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius: const BorderRadius.all(
+                                                    Radius.circular(8),
+                                                  ),
+                                                  child: Container(
+                                                    width: MediaQuery.of(context).size.width / 7,
+                                                    height: MediaQuery.of(context).size.height / 18,
+                                                    child: Image.network(
+                                                      API().imagebaseURL + item.proImage1,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 120,
+                                                      child: Text(
+                                                        item.proName,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14.sp,
+                                                          fontFamily: "poppinsRegular",
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ' ₹ ' + item.showPrice,
+                                                      style: TextStyle(
+                                                        color: AppColor.mainColor,
+                                                        fontSize: 16.sp,
+                                                        fontFamily: "poppinsRegular",
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                      'Qty',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15.sp,
+                                                        fontFamily: "poppinsRegular",
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          item.datumProQuantity,
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 15.sp,
+                                                            fontFamily: "poppinsRegular",
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                      'Total',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15.sp,
+                                                        fontFamily: "poppinsRegular",
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ' ₹ ' + item.totalamount.toString(),
+                                                      style: TextStyle(
+                                                        color: AppColor.mainColor,
+                                                        fontSize: 16.sp,
+                                                        fontFamily: "poppinsRegular",
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 10),
+                          Card(
+                            color: AppColor.secondarycolor,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+
+
+                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [ Text(
+                                    'Total Amount',
+                                    style: TextStyle(
+                                      color: AppColor.mainColor,
+                                      fontSize: 14.sp,
+                                      fontFamily: "poppinsSemibold",
+                                    ),
+                                  ),
+                                    Obx(() => Text(
+                                      '₹${registrationController.cartdata.value.data.fold(0, (sum, item) => sum + item.totalamount)}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                        fontFamily: "poppinsRegular",
+                                      ),
+                                    ))
+                                    ,],),
+                                  Divider(color: Colors.black26,thickness: 1,),
+                                  Center(
+                                    child: Text(
+                                      'Above total is inclusive of all taxes',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                        fontFamily: "poppinsRegular",
+                                      ),
+                                    ),
+                                  )
+
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                ),
+                SizedBox(
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -148,52 +365,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _customTextField({
-    required String labelTxt,
-    required String hintTxt,
-    bool readOnly = false,
-    required TextEditingController controller,
-    required TextInputType keyboardType,
-  }) {
-    return TextFormField(
-      readOnly: readOnly,
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        hintText: hintTxt,
-        hintStyle: const TextStyle(
-          fontSize: 12,
-          fontFamily: "poppinsRegular",
-          color: Colors.black,
-        ),
-        contentPadding: const EdgeInsets.fromLTRB(15.0, 10, 0, 10),
-        labelText: labelTxt,
-        labelStyle: const TextStyle(
-          fontSize: 16,
-          fontFamily: "poppinsRegular",
-          color: Colors.black,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(color: Color(0xffd9d9d9)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(color: Color(0xffd9d9d9)),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
         ),
       ),
     );

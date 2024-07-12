@@ -41,17 +41,17 @@ class _SingleCategoryState extends State<SingleCategory> {
             Get.back();
           },
           icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColor.mainColor,
+            Icons.arrow_back_rounded,
+            color: Colors.white,
           ),
         ),
-        backgroundColor: AppColor.secondarycolor,
+        backgroundColor: AppColor.mainColor,
         centerTitle: true,
         title: Text(
           widget.topic,
           style: TextStyle(
-            color: AppColor.mainColor,
-            fontSize: 20.sp,
+            color: Colors.white,
+            fontSize: 16.sp,
             fontFamily: "poppinssemibold",
           ),
         ),
@@ -109,7 +109,11 @@ class _SingleCategoryState extends State<SingleCategory> {
                     onTap: () {},
                     child: Card(
                       elevation: 5,
-                      color: AppColor.primarycolor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      color: Colors.white,
+                      shadowColor: Colors.grey.withOpacity(0.2),
                       child: Column(
                         children: [
                           Padding(
@@ -122,39 +126,48 @@ class _SingleCategoryState extends State<SingleCategory> {
                                 );
                                 Get.to(ProductDetail());
                               },
-                              child: Container(
+                              child:  Container(
                                 height: 100.h,
-                                child: Image.network(
-                                  API().imagebaseURL +
-                                      checklist[index].proImage1,
-                                  fit: BoxFit.contain,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    API().imagebaseURL +
+                                        checklist[index].proImage1,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          Text(
-                            checklist[index].proName ?? '',
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.sp,
-                              fontFamily: "poppinssemibold",
-                            ),
-                          ),
-                          Text(
-                            '₹  ' + checklist[index].showPrice,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                         Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,children: [ Text(
+                           checklist[index].proName ?? '',
+                           textAlign: TextAlign.center,
+                           maxLines: 1,
+                           overflow: TextOverflow.ellipsis,
+                           style: TextStyle(
+                             color: Colors.black,
+                             fontSize: 14.sp,
+                             fontFamily: "poppinssemibold",
+                           ),
+                         ),
+                           SizedBox(
+                             height: 5,
+                           ),
+                           Text(
+                             '₹  ' + checklist[index].showPrice,
+                             style: const TextStyle(
+                               color: Colors.black,
+                               fontWeight: FontWeight.bold,
+                             ),
+                           ),],),
+                          SizedBox(
+                            height: 8,
                           ),
                           ElevatedButton(
                             onPressed: () async {
                               await init.addcart(
                                 init.productbysubcatedata!.data[index]
-                                    .proDetailsId,
+                                    .proDetailsId
                               );
                             },
                             child: const Text(

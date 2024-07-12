@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _cnt = SingleValueDropDownController();
     // setState(() {});
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void dispose() {
     _cnt.dispose();
@@ -103,64 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
       color: AppColor.mainColor,
       child: SafeArea(
         child: Scaffold(
+
+          key: _scaffoldKey,
           backgroundColor: AppColor.secondarycolor,
-          // bottomNavigationBar: BottomNavBar(),
-          drawer: const Drawer(
-            child: DrawerWidget(),
-          ),
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
-            automaticallyImplyLeading: true,
-            backgroundColor: AppColor.mainColor,
-            centerTitle: true,
             elevation: 0,
-            title: Text(
-              'SKIPL',
-              style: TextStyle(
-                color:Colors.white,
-                fontSize: 18.sp,
-                fontFamily: "poppinssemibold",
-              ),
-            ),
-            actions: [
-              /*Container(
-                height: 10.h,
-                width: 140.w,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: DropDownTextField(
-                      controller: _cnt,
-                      clearOption: true,
-                      textFieldDecoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Thirupathi',
-                        contentPadding: EdgeInsets.only(left: 10, top: 3),
-                        hintStyle: TextStyle(color: Colors.black, fontSize: 12),
-                      ),
-                      dropDownItemCount: 6,
-                      dropdownColor: Colors.white,
-                      dropDownIconProperty: IconProperty(color: Colors.black),
-                      textStyle: const TextStyle(fontSize: 16, color: Colors.black),
-                      dropDownList: citylist,
-                      onChanged: (val) {
-                        print('Selected: ' + val.toString());
-                        if (val.name == 'Thirupathi') {
-                          Get.back();
-                        } else {
-                          Get.to(
-                            const Noorder(),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),*/
-            ],
+            iconTheme: IconThemeData(color: Colors.white),
+            leading: IconButton(onPressed: () {
+              _scaffoldKey.currentState!.openDrawer();
+            }, icon: Icon(Icons.menu)),
+            actions: [IconButton(onPressed: () {
+              
+            }, icon: Icon(Icons.notifications,color: Colors.white,))],
+            backgroundColor:  AppColor.mainColor,
+            centerTitle: true,
+            title: ClipRRect(borderRadius: BorderRadius.circular(10),child: Container(color: Colors.white,child: Image.asset("assets/images/logo.png",width: 100,))),
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -258,76 +215,59 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     : Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: Container(
+                        child:  Container(
                           color: Colors.transparent,
                           height: MediaQuery.of(context).size.height / 5,
                           child: ListView.builder(
-                            itemCount:
-                                init.homedata?.data[0].categories.length ?? 0,
-                            // padding: const EdgeInsets.all(8.0),
+                            itemCount: init.homedata?.data[0].categories.length ?? 0,
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () async {
-                                  await init.productbysubcatecall(init
-                                      .homedata?.data[0].categories[index].catId);
+                                  await init.productbysubcatecall(init.homedata?.data[0].categories[index].catId);
                                   Get.to(
                                     SingleCategory(
-                                      topic: init.homedata!.data[0]
-                                          .categories[index].catName
-                                          .toString(),
+                                      topic: init.homedata!.data[0].categories[index].catName.toString(),
                                     ),
-                                    transition: Transition.downToUp,
+                                    transition: Transition.native,
                                     duration: const Duration(milliseconds: 300),
                                     preventDuplicates: true,
                                   );
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => SingleCategory(
-                                  //             topic: init.homedata?.data[0]
-                                  //                 .categories[index].catName
-                                  //                 .toString(),
-                                  //           )),
-                                  // );
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: AppColor.primarycolor,
+                                      gradient: LinearGradient(
+                                        colors: [AppColor.primarycolor.withOpacity(0.7), AppColor.primarycolor],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.grey.shade300,
                                           spreadRadius: 1,
                                           blurRadius: 7,
-                                        )
+                                          offset: Offset(0, 3),
+                                        ),
                                       ],
                                     ),
                                     child: SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width / 3.4,
-                                      // height: MediaQuery.of(context).size.height / 15,
+                                      width: MediaQuery.of(context).size.width / 3.4,
                                       child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 15),
-                                            child: CircleAvatar(
-                                                radius: 40,
-                                                backgroundImage: NetworkImage(
-                                                    API().imagebaseURL +
-                                                        init
-                                                            .homedata!
-                                                            .data[0]
-                                                            .categories[index]
-                                                            .catImg)),
+                                          CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage: NetworkImage(
+                                              API().imagebaseURL + init.homedata!.data[0].categories[index].catImg,
+                                            ),
                                           ),
-                                          kbox10,
+                                          SizedBox(height: 10),
                                           Text(
-                                            init.homedata!.data[0].categories[index]
-                                                .catName,
+                                            init.homedata!.data[0].categories[index].catName,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 14.sp,
@@ -343,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                        ),
+                        )
                       ),
                 kbox10,
                 Padding(
@@ -360,113 +300,100 @@ class _HomeScreenState extends State<HomeScreen> {
                 kbox10,
                 Container(
                   height: MediaQuery.of(context).size.height / 3.2,
-                  child:
-                      //  init.homedata!.data[0].getProducts == ''
-                      //     ? CircularProgressIndicator()
-                      //     :
-                      ListView.builder(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: init.homedata?.data[0].getProducts.length ?? 0,
                     itemBuilder: (context, index) {
+                      final product = init.homedata?.data[0].getProducts[index];
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColor.primarycolor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                spreadRadius: 1,
-                                blurRadius: 7,
-                              )
-                            ],
-                          ),
-                          width: MediaQuery.of(context).size.width / 2.5,
-                          // height: MediaQuery.of(context).size.height / 15,
-                          child: Column(
-                            children: [
-                              Container(
-                                // height: MediaQuery.of(context).size.height / 4.5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                      onTap: () async {
-                                        await init.catdetail(init.homedata?.data[0]
-                                            .getProducts[index].proDetailsId);
-                                        Get.to(ProductDetail(),
-                                            transition: Transition.downToUp,
-                                            duration: Duration(milliseconds: 300),
-                                            preventDuplicates: true);
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) =>
-                                        //             ProductDetail()));
-                                      },
-                                      child: Container(
-                                        // color: Colors.amber,
-
-                                        width: 300,
-                                        height: 100,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: Image.network(
-                                              API().imagebaseURL +
-                                                  init.homedata!.data[0]
-                                                      .getProducts[index].proImage1,
-                                              fit: BoxFit.cover),
-                                        ),
-                                      )),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            await init.catdetail(product?.proDetailsId);
+                            Get.to(const ProductDetail(),
+                                transition: Transition.native,
+                                duration: Duration(milliseconds: 300),
+                                preventDuplicates: true);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3), // changes position of shadow
                                 ),
-                              ),
-                              kbox10,
-                              Container(
-                                width: 150,
-                                child: Text(
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  init.homedata!.data[0].getProducts[index].proName,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    fontFamily: "poppinssemibold",
-                                    color: Colors.black,
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                                    child: Image.network(
+                                      API().imagebaseURL + "${product?.proImage1}",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                ' ₹ ' +
-                                    init.homedata!.data[0].getProducts[index]
-                                        .showPrice,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await init.addcart(init.homedata!.data[0]
-                                      .getProducts[index].proDetailsId);
-                                  // Fluttertoast.showToast(
-                                  //     msg: 'Product added to yhe cart');
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => CartBottomNav()),
-                                  // );
-                                },
-                                child: Text(
-                                  'Add to cart',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.mainColor,
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30))),
-                              )
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${product?.proName}",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          fontFamily: "PoppinsSemiBold",
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        '₹ ${product?.showPrice}',
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          await init.addcart(product?.proDetailsId);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: AppColor.mainColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Add to cart',
+                                            style: TextStyle(
+                                              fontSize: 10.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       );

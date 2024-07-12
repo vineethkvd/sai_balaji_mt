@@ -12,6 +12,7 @@ import 'package:purie_ui/app/view/bottom_nav/bottom_main.dart';
 
 import '../../controller/auth.dart';
 
+
 class otpscreen extends StatefulWidget {
   const otpscreen({super.key});
 

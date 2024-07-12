@@ -10,14 +10,20 @@ import 'package:http/http.dart' as http;
 
 import '../../api_endpoints.dart';
 import '../../base_client.dart';
+import '../model/add_product_model.dart';
+import '../model/address_model.dart';
 import '../model/all_delivery_address.dart';
+import '../model/cart.dart';
 import '../model/city_model.dart';
 import '../model/country_model.dart';
+import '../model/delete_address_model.dart';
 import '../model/delivery_address_model.dart';
 import '../model/my_profile.dart';
 import '../model/registration_model.dart';
 import '../model/state_model.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+
+import '../model/user_profile.dart';
 
 class RegistrationController extends GetxController with BaseController {
   TextEditingController nameController = TextEditingController();
@@ -219,14 +225,17 @@ class RegistrationController extends GetxController with BaseController {
 //available pincode
   DeliveryAddressModel? deliveryAddressModel;
   Future<void> addDeliveryAddress(
-      {required String address, required String type}) async {
+      {required String address,
+      required String deliveryMobile,
+      required String pinCode}) async {
     try {
       loading.value = true;
       var userid = GetStorage().read('UserID').toString();
       var body = {
         "user_id": userid,
         "new_address": address.toString(),
-        "address_type": type.toString()
+        "delivery_mobile": type.toString(),
+        "pincode": pinCode.toString()
       };
       print(body);
 
@@ -248,8 +257,9 @@ class RegistrationController extends GetxController with BaseController {
       loading.value = false;
     }
   }
+
 //fetch profile
-  final profileModel = Profile().obs;
+  final profileModel = UserProfileModel().obs;
 
   Future<void> fetchProfile() async {
     print("called");
@@ -266,8 +276,8 @@ class RegistrationController extends GetxController with BaseController {
       Fluttertoast.showToast(msg: data['status'].toString());
 
       if (data['status'] == true) {
-        profileModel.value = Profile.fromJson(data);
-        Fluttertoast.showToast(msg: data['msg']);
+        profileModel.value = UserProfileModel.fromJson(data);
+        // Fluttertoast.showToast(msg: data['msg']);
       } else {
         Fluttertoast.showToast(msg: data['msg']);
       }
@@ -277,11 +287,10 @@ class RegistrationController extends GetxController with BaseController {
   }
   //fetch delivery adddress
 
-
-
   final allDeliveryAddressModel = AllDeliveryAddressModel().obs;
-  var selectedAddressId=''.obs;
-  var currentAddress=''.obs;
+  var selectedAddressId = ''.obs;
+  var currentAddress = ''.obs;
+  var isReadMore = false.obs;
   Future<void> fetchDeliveryAddress() async {
     print("called");
     var userid = GetStorage().read('UserID').toString();
@@ -290,19 +299,108 @@ class RegistrationController extends GetxController with BaseController {
     };
 
     try {
-      var response =
-      await BaseClient().post(API().deliveryAddress, body).catchError(handleError);
+      var response = await BaseClient()
+          .post(API().deliveryAddress, body)
+          .catchError(handleError);
+      var data = json.decode(response);
+      Fluttertoast.showToast(msg: "${data['status']}");
+
+      if (data['status'] == true) {
+        allDeliveryAddressModel.value = AllDeliveryAddressModel.fromJson(data);
+      } else {
+        allDeliveryAddressModel.value = AllDeliveryAddressModel.fromJson(data);
+        Fluttertoast.showToast(msg: "${allDeliveryAddressModel.value.msg}");
+      }
+    } catch (e) {
+      handleError(e);
+    }
+  }
+
+  //delete address
+  final deleteAddressModel = DeleteAddressModel().obs;
+  Future<void> deleteAddress({required String addressId}) async {
+    print("called");
+    var userid = GetStorage().read('UserID').toString();
+    var body = {"user_id": userid, "address_id": addressId};
+
+    try {
+      var response = await BaseClient()
+          .post(API().deleteDelAddress, body)
+          .catchError(handleError);
       var data = json.decode(response);
 
       Fluttertoast.showToast(msg: data['status'].toString());
 
       if (data['status'] == true) {
-        allDeliveryAddressModel.value = AllDeliveryAddressModel.fromJson(data);
+        deleteAddressModel.value = DeleteAddressModel.fromJson(data);
+        Fluttertoast.showToast(msg: data['msg']);
       } else {
         Fluttertoast.showToast(msg: data['msg']);
       }
     } catch (e) {
       handleError(e);
+    }
+  }
+
+  //cart
+  var cartdata = Cart(status: false, msg: '', data: []).obs;
+  var isLoading = false.obs;
+
+  Future<void> fetchCartData() async {
+    print("called");
+    var userid = GetStorage().read('UserID').toString();
+    var body = {
+      "user_id": userid,
+    };
+
+    try {
+      isLoading(true);
+      var response =
+      await BaseClient().post(API().cart, body).catchError(handleError);
+      var data = json.decode(response);
+
+      Fluttertoast.showToast(msg: data['status'].toString());
+
+      if (data['status'] == true) {
+        cartdata.value = Cart.fromJson(data);
+        Fluttertoast.showToast(msg: data['msg']);
+      } else {
+        Fluttertoast.showToast(msg: data['msg']);
+      }
+    } catch (e) {
+      handleError(e);
+    } finally {
+      isLoading(false);
+    }
+  }
+  var addProductCartModel=AddProductCartModel().obs;
+  Future<void> addToCart({required int proId,required int quantity}) async {
+    print("called");
+    var userid = GetStorage().read('UserID').toString();
+    var body = {
+      "user_id": userid,
+      "pro_id":proId,
+      "quantity":quantity
+    };
+
+    try {
+      isLoading(true);
+      var response =
+      await BaseClient().post(API().cart, body).catchError(handleError);
+      var data = json.decode(response);
+
+      Fluttertoast.showToast(msg: data['status'].toString());
+
+      if (data['status'] == true) {
+        addProductCartModel.value = AddProductCartModel.fromJson(data);
+        Fluttertoast.showToast(msg: data['msg']);
+      } else {
+        Fluttertoast.showToast(msg: data['msg']);
+      }
+    } catch (e) {
+      handleError(e);
+    } finally {
+      isLoading(false);
     }
   }
 }

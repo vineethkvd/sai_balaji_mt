@@ -18,26 +18,17 @@ class PaymentOptionsPage extends StatefulWidget {
   const PaymentOptionsPage({super.key});
 
   @override
-  State<PaymentOptionsPage> createState() =>
-      _PaymentOptionsPageState();
+  State<PaymentOptionsPage> createState() => _PaymentOptionsPageState();
 }
 
 class _PaymentOptionsPageState extends State<PaymentOptionsPage> {
   final RegistrationController registrationController =
-  Get.put(RegistrationController());
-  AddressModel? addressModel;
-  @override
-  void initState() {
-    registrationController.chkCountryList();
-    super.initState();
-  }
+      Get.put(RegistrationController());
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      registrationController.clearFields();
-    });
-    super.dispose();
+  void initState() {
+    super.initState();
+    registrationController.fetchCartData();
   }
 
   @override
@@ -73,42 +64,42 @@ class _PaymentOptionsPageState extends State<PaymentOptionsPage> {
             height: Get.height,
             width: Get.width,
             color: AppColor.secondarycolor,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Center(
-                      child: ClipRRect(
+            child: Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Material(
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(15.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(15.0),
-                          elevation: 5.0,
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: AppColor.mainColor,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: InkWell(
-                              onTap: () async {
-                                Get.to(const PayOnlinePage(),transition: Transition.native);
-                              },
-                              child: Container(
-                                width: Get.width,
-                                height: 40,
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child:  const Text(
-                                    'Pay Online',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "poppinsRegular",
-                                      color: Colors.white,
-                                    ),
+                        elevation: 5.0,
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: AppColor.mainColor,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              Get.to(const PayOnlinePage(),
+                                  transition: Transition.native);
+                            },
+                            child: Container(
+                              width: Get.width,
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child:  Text(
+                                  'Pay Online ${ registrationController.profileModel.value.data?.userType }',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "poppinsRegular",
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -118,38 +109,39 @@ class _PaymentOptionsPageState extends State<PaymentOptionsPage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Center(
-                      child: ClipRRect(
+                ),
+                registrationController.profileModel.value.data?.userType == "Distributors" ?Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Material(
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(15.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(15.0),
-                          elevation: 5.0,
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: AppColor.mainColor,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: InkWell(
-                              onTap: () async {
-                                Get.to(CheckPaymentPage(),transition: Transition.native);
-                              },
-                              child: Container(
-                                width: Get.width,
-                                height: 40,
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child:const Text(
-                                    'Check Payment',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "poppinsRegular",
-                                      color: Colors.white,
-                                    ),
+                        elevation: 5.0,
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: AppColor.mainColor,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              Get.to(CheckPaymentPage(),
+                                  transition: Transition.native);
+                            },
+                            child: Container(
+                              width: Get.width,
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: const Text(
+                                  'Check Payment',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "poppinsRegular",
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -159,38 +151,39 @@ class _PaymentOptionsPageState extends State<PaymentOptionsPage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Center(
-                      child: ClipRRect(
+                ):const SizedBox(),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Material(
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(15.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(15.0),
-                          elevation: 5.0,
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: AppColor.mainColor,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: InkWell(
-                              onTap: () async {
-                                // Get.to(CashonDeliveryPage(),transition: Transition.native);
-                              },
-                              child: Container(
-                                width: Get.width,
-                                height: 40,
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'Cash on delivery',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "poppinsRegular",
-                                      color: Colors.white,
-                                    ),
+                        elevation: 5.0,
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: AppColor.mainColor,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              // Get.to(CashonDeliveryPage(), transition: Transition.native);
+                            },
+                            child: Container(
+                              width: Get.width,
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: const Text(
+                                  'Cash on delivery',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "poppinsRegular",
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -200,7 +193,10 @@ class _PaymentOptionsPageState extends State<PaymentOptionsPage> {
                       ),
                     ),
                   ),
-                ]),
+                ),
+              ],
+            )
+            )
           ),
         ),
       ),

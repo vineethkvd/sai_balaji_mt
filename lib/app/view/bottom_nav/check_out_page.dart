@@ -95,7 +95,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             child: InkWell(
                               onTap: () async {
                                 await initCon.chkAvailPinCode().then((_) {
-                                  bool isAvailable = initCon.isPinCodeAvailable(
+                                  bool isAvailable =
+                                  initCon.isPinCodeAvailable(
                                       initCon.chkPinCode.text);
                                   if (isAvailable == true) {
                                     registrationController
@@ -111,8 +112,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                           addressFound = true;
                                           Get.to(
                                               ChooseDeliveryAddress(
-                                                  pinCode:
-                                                      initCon.chkPinCode.text),
+                                                  pinCode: initCon
+                                                      .chkPinCode.text),
                                               transition: Transition.native);
                                           Fluttertoast.showToast(
                                               msg: "Choose delivery address");
@@ -125,14 +126,31 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                         Get.to(
                                             CheckoutAddressPage(
                                                 pinCode:
-                                                    initCon.chkPinCode.text),
+                                                initCon.chkPinCode.text),
                                             transition: Transition.cupertino);
+                                      }else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                            'Delivery is not available for this place');
                                       }
                                     });
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Delivery is not available for this place');
+                                  }
+                                 if (registrationController
+                                          .allDeliveryAddressModel
+                                          .value
+                                          .status ==
+                                      false) {
+                                    if (registrationController
+                                            .allDeliveryAddressModel
+                                            .value
+                                            .msg ==
+                                        "No addresses found") {
+                                      Get.to(
+                                        CheckoutAddressPage(
+                                            pinCode: initCon.chkPinCode.text),
+                                        transition: Transition.native,
+                                      );
+                                    }
                                   }
                                 });
                               },
