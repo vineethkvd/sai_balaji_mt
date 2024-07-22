@@ -273,8 +273,6 @@ class RegistrationController extends GetxController with BaseController {
           await BaseClient().post(API().profile, body).catchError(handleError);
       var data = json.decode(response);
 
-      Fluttertoast.showToast(msg: data['status'].toString());
-
       if (data['status'] == true) {
         profileModel.value = UserProfileModel.fromJson(data);
         // Fluttertoast.showToast(msg: data['msg']);
@@ -303,7 +301,6 @@ class RegistrationController extends GetxController with BaseController {
           .post(API().deliveryAddress, body)
           .catchError(handleError);
       var data = json.decode(response);
-      Fluttertoast.showToast(msg: "${data['status']}");
 
       if (data['status'] == true) {
         allDeliveryAddressModel.value = AllDeliveryAddressModel.fromJson(data);
@@ -329,8 +326,6 @@ class RegistrationController extends GetxController with BaseController {
           .catchError(handleError);
       var data = json.decode(response);
 
-      Fluttertoast.showToast(msg: data['status'].toString());
-
       if (data['status'] == true) {
         deleteAddressModel.value = DeleteAddressModel.fromJson(data);
         Fluttertoast.showToast(msg: data['msg']);
@@ -347,7 +342,6 @@ class RegistrationController extends GetxController with BaseController {
   var isLoading = false.obs;
 
   Future<void> fetchCartData() async {
-    print("called");
     var userid = GetStorage().read('UserID').toString();
     var body = {
       "user_id": userid,
@@ -358,8 +352,6 @@ class RegistrationController extends GetxController with BaseController {
       var response =
       await BaseClient().post(API().cart, body).catchError(handleError);
       var data = json.decode(response);
-
-      Fluttertoast.showToast(msg: data['status'].toString());
 
       if (data['status'] == true) {
         cartdata.value = Cart.fromJson(data);
@@ -373,34 +365,43 @@ class RegistrationController extends GetxController with BaseController {
       isLoading(false);
     }
   }
-  var addProductCartModel=AddProductCartModel().obs;
-  Future<void> addToCart({required int proId,required int quantity}) async {
-    print("called");
-    var userid = GetStorage().read('UserID').toString();
-    var body = {
-      "user_id": userid,
-      "pro_id":proId,
-      "quantity":quantity
+
+  var addProductCartModel = AddProductCartModel().obs;
+  Future<void> addToCart({required int proId, required int quantity}) async {
+    var userId = GetStorage().read('UserID').toString();
+    const apiUrl = "https://saks.teckzy.co.in/User_api/add_to_cart";
+    final headers = {
+      'x-api-key': 'saibalaji@teckzy',
+      'Content-Type': 'application/x-www-form-urlencoded',
     };
 
+    final requestData = {
+      "user_id": userId,
+      "pro_id": proId,
+      "quantity": quantity
+    };
+    final jsonBody = json.encode(requestData);
+
     try {
-      isLoading(true);
-      var response =
-      await BaseClient().post(API().cart, body).catchError(handleError);
-      var data = json.decode(response);
+      final response =
+      await http.post(Uri.parse(apiUrl), headers: headers, body: jsonBody);
 
-      Fluttertoast.showToast(msg: data['status'].toString());
-
-      if (data['status'] == true) {
-        addProductCartModel.value = AddProductCartModel.fromJson(data);
-        Fluttertoast.showToast(msg: data['msg']);
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final addToCart = AddProductCartModel.fromJson(responseData);
+        Fluttertoast.showToast(msg: responseData['msg']);
       } else {
-        Fluttertoast.showToast(msg: data['msg']);
+        throw Exception('Request failed with status: ${response.statusCode}');
       }
+    } on http.ClientException catch (e) {
+      throw Exception('HTTP Client Exception: $e');
+    } on SocketException catch (e) {
+      throw Exception('Socket Exception: $e');
     } catch (e) {
-      handleError(e);
-    } finally {
-      isLoading(false);
+      throw Exception('Error: $e');
     }
   }
+
+
+
 }

@@ -49,9 +49,7 @@ class _CheckoutAddressPageState extends State<CheckoutAddressPage> {
             registrationController.profileModel.value?.data?.userFlatNum ?? '';
         registrationController.townController.text =
             registrationController.profileModel.value?.data?.userTown ?? '';
-        registrationController.phoneController.text =
-            registrationController.profileModel.value?.data?.userMobileno ?? '';
-        registrationController.phoneController.text =
+        registrationController.societyAreaController.text =
             registrationController.profileModel.value?.data?.userLandMark ?? '';
       }
     });

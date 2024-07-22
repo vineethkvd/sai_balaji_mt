@@ -11,7 +11,14 @@ import '../../controller/payment_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PayOnlinePage extends StatefulWidget {
-  const PayOnlinePage({super.key});
+  final addId;
+  final pincode;
+  final fAmount;
+  const PayOnlinePage(
+      {super.key,
+      required this.addId,
+      required this.pincode,
+      required this.fAmount});
 
   @override
   State<PayOnlinePage> createState() => _PayOnlinePageState();
@@ -21,6 +28,7 @@ class _PayOnlinePageState extends State<PayOnlinePage> {
   final PaymentController paymentController = Get.put(PaymentController());
   @override
   void initState() {
+    paymentController.payableAmount.text=widget.fAmount.toString();
     paymentController.fetchBankDetails();
     super.initState();
   }
@@ -103,23 +111,25 @@ class _PayOnlinePageState extends State<PayOnlinePage> {
                       height: 10,
                     ),
                     Obx(
-                          () => ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                        color: Colors.black12,
-                        width: Get.width,
-                        height: 200,
-                        child: HtmlWidget(
-                            paymentController.bankDetailsModel.value?.data?.first.bankDetails?.first.bankDetails ?? '',
+                      () => ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          color: Colors.black12,
+                          width: Get.width,
+                          height: 200,
+                          child: HtmlWidget(
+                            paymentController.bankDetailsModel.value?.data
+                                    ?.first.bankDetails?.first.bankDetails ??
+                                '',
                             textStyle: TextStyle(
                               fontSize: 16,
                               fontFamily: 'poppinsRegular',
                               color: Colors.black,
                             ),
+                          ),
                         ),
                       ),
-                          ),
                     ),
                     SizedBox(
                       height: 10,
@@ -136,6 +146,15 @@ class _PayOnlinePageState extends State<PayOnlinePage> {
                     SizedBox(height: 12),
                     Column(
                       children: [
+                        SizedBox(height: 12),
+                        _customTextField(
+                          labelTxt: "Payable Amount",
+                          hintTxt: "Enter amount",
+                          readOnly: true,
+                          controller: paymentController.payableAmount,
+                          keyboardType: TextInputType.text,
+                        ),
+                        SizedBox(height: 12),
                         SizedBox(height: 12),
                         _customTextField(
                           labelTxt: "Amount",
@@ -168,7 +187,28 @@ class _PayOnlinePageState extends State<PayOnlinePage> {
                                   ),
                                   child: InkWell(
                                     onTap: () async {
-                                      // Get.to(CashonDeliveryPage(),transition: Transition.native);
+                                      if (paymentController
+                                          .amountPayOnline.text.isEmpty) {
+                                        Fluttertoast.showToast(
+                                            msg: 'Please enter the amount');
+                                      } else if (paymentController
+                                          .transactionID.text.isEmpty) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Please enter the correct number');
+                                      } else {
+                                        paymentController.placeOrder(
+                                            type: "Online",
+                                            addressId: widget.addId.toString(),
+                                            pinCode: widget.pincode.toString(),
+                                            amount: paymentController
+                                                .transactionID.text,
+                                            finalAmount:
+                                                widget.fAmount.toString(),
+                                            chkNo: '',
+                                            transId: paymentController
+                                                .transactionID.text);
+                                      }
                                     },
                                     child: Container(
                                       width: 150,

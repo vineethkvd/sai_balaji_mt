@@ -8,7 +8,10 @@ import '../bottom_nav/payment_options.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final String delAdId;
-  const OrderDetailPage({Key? key, required this.delAdId}) : super(key: key);
+  final String pincode;
+  const OrderDetailPage(
+      {Key? key, required this.delAdId, required this.pincode})
+      : super(key: key);
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -16,7 +19,7 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   final RegistrationController registrationController =
-  Get.put(RegistrationController());
+      Get.put(RegistrationController());
 
   @override
   void initState() {
@@ -86,13 +89,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 5,
                             blurRadius: 7,
-                            offset: const Offset(0, 3), // changes position of shadow
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
                         ],
                       ),
@@ -118,14 +123,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                   thickness: 1,
                                 ),
                                 Obx(() => Text(
-                                  "${registrationController.currentAddress.value}",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13.sp,
-                                    fontFamily: "poppinsRegular",
-                                  ),
-                                ))
+                                      "${registrationController.currentAddress.value}",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 13.sp,
+                                        fontFamily: "poppinsRegular",
+                                      ),
+                                    ))
                               ]),
                           SizedBox(
                             height: 10,
@@ -145,45 +150,66 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ),
                           Obx(() {
                             if (registrationController.isLoading.value) {
-                              return const Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
-                            if (registrationController.cartdata.value.data.isEmpty) {
-                              return const Center(child: Text('No items in cart'));
+                            if (registrationController
+                                .cartdata.value.data.isEmpty) {
+                              return const Center(
+                                  child: Text('No items in cart'));
                             }
                             return Expanded(
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: registrationController.cartdata.value.data.length,
+                                itemCount: registrationController
+                                    .cartdata.value.data.length,
                                 itemBuilder: (context, index) {
-                                  var item = registrationController.cartdata.value.data[index];
+                                  var item = registrationController
+                                      .cartdata.value.data[index];
                                   return Column(
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SizedBox(
-                                          width: MediaQuery.of(context).size.width + 30,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width +
+                                              30,
                                           height: 80,
                                           child: Card(
                                             elevation: 2,
                                             color: AppColor.primarycolor,
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 ClipRRect(
-                                                  borderRadius: const BorderRadius.all(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
                                                     Radius.circular(8),
                                                   ),
                                                   child: Container(
-                                                    width: MediaQuery.of(context).size.width / 7,
-                                                    height: MediaQuery.of(context).size.height / 18,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            7,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            18,
                                                     child: Image.network(
-                                                      API().imagebaseURL + item.proImage1,
+                                                      API().imagebaseURL +
+                                                          item.proImage1,
                                                       fit: BoxFit.fill,
                                                     ),
                                                   ),
                                                 ),
                                                 Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
                                                   children: [
                                                     SizedBox(
                                                       width: 120,
@@ -192,30 +218,37 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 14.sp,
-                                                          fontFamily: "poppinsRegular",
+                                                          fontFamily:
+                                                              "poppinsRegular",
                                                         ),
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
                                                     Text(
                                                       ' ₹ ' + item.showPrice,
                                                       style: TextStyle(
-                                                        color: AppColor.mainColor,
+                                                        color:
+                                                            AppColor.mainColor,
                                                         fontSize: 16.sp,
-                                                        fontFamily: "poppinsRegular",
+                                                        fontFamily:
+                                                            "poppinsRegular",
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
                                                   children: [
                                                     Text(
                                                       'Qty',
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 15.sp,
-                                                        fontFamily: "poppinsRegular",
+                                                        fontFamily:
+                                                            "poppinsRegular",
                                                       ),
                                                     ),
                                                     Row(
@@ -225,7 +258,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 15.sp,
-                                                            fontFamily: "poppinsRegular",
+                                                            fontFamily:
+                                                                "poppinsRegular",
                                                           ),
                                                         ),
                                                       ],
@@ -233,22 +267,29 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                   ],
                                                 ),
                                                 Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
                                                   children: [
                                                     Text(
                                                       'Total',
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 15.sp,
-                                                        fontFamily: "poppinsRegular",
+                                                        fontFamily:
+                                                            "poppinsRegular",
                                                       ),
                                                     ),
                                                     Text(
-                                                      ' ₹ ' + item.totalamount.toString(),
+                                                      ' ₹ ' +
+                                                          item.totalamount
+                                                              .toString(),
                                                       style: TextStyle(
-                                                        color: AppColor.mainColor,
+                                                        color:
+                                                            AppColor.mainColor,
                                                         fontSize: 16.sp,
-                                                        fontFamily: "poppinsRegular",
+                                                        fontFamily:
+                                                            "poppinsRegular",
                                                       ),
                                                     ),
                                                   ],
@@ -276,26 +317,32 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
-
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [ Text(
-                                    'Total Amount',
-                                    style: TextStyle(
-                                      color: AppColor.mainColor,
-                                      fontSize: 14.sp,
-                                      fontFamily: "poppinsSemibold",
-                                    ),
-                                  ),
-                                    Obx(() => Text(
-                                      '₹${registrationController.cartdata.value.data.fold(0, (sum, item) => sum + item.totalamount)}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14.sp,
-                                        fontFamily: "poppinsRegular",
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total Amount',
+                                        style: TextStyle(
+                                          color: AppColor.mainColor,
+                                          fontSize: 14.sp,
+                                          fontFamily: "poppinsSemibold",
+                                        ),
                                       ),
-                                    ))
-                                    ,],),
-                                  Divider(color: Colors.black26,thickness: 1,),
+                                      Obx(() => Text(
+                                            '₹${registrationController.cartdata.value.data.fold(0, (sum, item) => sum + item.totalamount)}',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.sp,
+                                              fontFamily: "poppinsRegular",
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.black26,
+                                    thickness: 1,
+                                  ),
                                   Center(
                                     child: Text(
                                       'Above total is inclusive of all taxes',
@@ -307,7 +354,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       ),
                                     ),
                                   )
-
                                 ],
                               ),
                             ),
@@ -337,7 +383,17 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Get.to(const PaymentOptionsPage(),
+                              Get.to(
+                                  PaymentOptionsPage(
+                                    addId: widget.delAdId,
+                                    pincode: widget.pincode,
+                                    fAmount: registrationController
+                                        .cartdata.value.data
+                                        .fold(
+                                            0,
+                                            (sum, item) =>
+                                                sum + item.totalamount),
+                                  ),
                                   transition: Transition.native);
                             },
                             child: Container(

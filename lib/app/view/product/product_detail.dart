@@ -8,6 +8,7 @@ import 'package:purie_ui/api_endpoints.dart';
 import 'package:purie_ui/app/common/common.dart';
 import '../../common/colors.dart';
 import '../../controller/init.dart';
+import '../../controller/registration_controller.dart';
 import '../bottom_nav/bottom_main.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -19,7 +20,8 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   int quantity = 1;
-
+  final RegistrationController registrationController =
+      Get.put(RegistrationController());
   @override
   Widget build(BuildContext context) {
     InitCon init = Get.put(InitCon());
@@ -36,7 +38,7 @@ class _ProductDetailState extends State<ProductDetail> {
           },
           icon: const Icon(
             Icons.arrow_back_sharp,
-            color:Colors.white,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -59,15 +61,19 @@ class _ProductDetailState extends State<ProductDetail> {
                   children: [
                     CarouselSlider.builder(
                       itemCount: init.catdetaildata!.images.length,
-                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                      itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: CachedNetworkImage(
-                            imageUrl: API().imagebaseURL + init.catdetaildata!.images[itemIndex].the0,
+                            imageUrl: API().imagebaseURL +
+                                init.catdetaildata!.images[itemIndex].the0,
                             fit: BoxFit.cover,
                             width: double.infinity,
-                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            placeholder: (context, url) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         );
                       },
@@ -118,7 +124,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                   ],
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: AppColor.mainColor,
@@ -202,11 +209,14 @@ class _ProductDetailState extends State<ProductDetail> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Html(
-                                  data: init.catdetaildata!.data[0].proDescription,
+                                  data: init
+                                      .catdetaildata!.data[0].proDescription,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20), // Add some space below the description
+                            SizedBox(
+                                height:
+                                    20), // Add some space below the description
                           ],
                         ),
                       ),
@@ -220,7 +230,10 @@ class _ProductDetailState extends State<ProductDetail> {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () async {
-                await init.addcart(init.catdetaildata!.data[0].proDetailsId);
+                registrationController.addToCart(
+                    proId: int.parse(
+                        "${init.catdetaildata!.data[0].proDetailsId}"),
+                    quantity: quantity);
               },
               icon: const Icon(Icons.add_shopping_cart, color: Colors.white),
               label: Text(

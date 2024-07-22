@@ -39,5 +39,7 @@ class API {
   String getBank = "get_bank";
   String deliveryAddress = "delivery_address";
   String deleteDelAddress = "delete_deladdress";
+  String itemAddToCart = "add_to_cart";
+  static String placeOrder = "place_order";
 
 }

@@ -286,7 +286,7 @@ class _ChooseDeliveryAddressState extends State<ChooseDeliveryAddress> {
                                         Get.to(
                                           OrderDetailPage(
                                             delAdId: registrationController
-                                                .selectedAddressId.value,
+                                                .selectedAddressId.value, pincode: widget.pinCode,
                                           ),
                                           transition: Transition.native,
                                         );
