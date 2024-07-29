@@ -1,6 +1,6 @@
 class API {
-  String baseURL = "https://saks.teckzy.co.in/User_api/";
-  String imagebaseURL = "https://saks.teckzy.co.in/";
+  String baseURL = "https://saks.skipl.net/User_api/";
+  String imagebaseURL = "https://skipl.net/";
   String gapikey = "";
   String logIn = "confirm_login";
   String register = "register";
@@ -8,6 +8,8 @@ class API {
   //home
   String home = "home_page";
   String allmpc = "all_categories";
+  String userOrder = "my_orders";
+
   //String subcategory = "list_sub_cat";
   String subcategory = "list_sub_cat";
   String productbysub = "get_products";
@@ -34,12 +36,14 @@ class API {
   String active = "user_auth";
   String availablePincode = "available_pincode";
   String addNewAddress = "add_new_address";
-  static String userBaseURL = "https://saks.teckzy.co.in/User_api/";
+  static String userBaseURL ="https://saks.skipl.net/User_api/";
   static String userRegister = "register";
   String getBank = "get_bank";
   String deliveryAddress = "delivery_address";
   String deleteDelAddress = "delete_deladdress";
   String itemAddToCart = "add_to_cart";
   static String placeOrder = "place_order";
+  static String myOrders = "my_orders";
+  String Orders = "my_orders";
 
 }

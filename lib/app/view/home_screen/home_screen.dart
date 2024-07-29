@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
   initState() {
     callapi();
     _cnt = SingleValueDropDownController();
-    // setState(() {});
+    setState(() {});
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -99,18 +99,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final _controller = PageController();
+    final GlobalKey<ScaffoldState> _key = GlobalKey();
     return Container(
       color: AppColor.mainColor,
       child: SafeArea(
-        child: Scaffold(
 
-          key: _scaffoldKey,
+        child: Scaffold(
+          drawer: const DrawerWidget(),
+          key: _key,
           backgroundColor: AppColor.secondarycolor,
           appBar: AppBar(
             elevation: 0,
             iconTheme: IconThemeData(color: Colors.white),
             leading: IconButton(onPressed: () {
-              _scaffoldKey.currentState!.openDrawer();
+              _key.currentState!.openDrawer();
             }, icon: Icon(Icons.menu)),
             actions: [IconButton(onPressed: () {
               

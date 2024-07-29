@@ -76,7 +76,7 @@ class DrawerWidget extends StatelessWidget {
               onTap: () async {
                 await init.myorders();
                 Get.back();
-                Get.to(MyOrder(),
+                Get.to(MyOrderPage(),
                     transition: Transition.leftToRight,
                     duration: Duration(milliseconds: 300),
                     preventDuplicates: true);

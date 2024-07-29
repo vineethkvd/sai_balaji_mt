@@ -141,6 +141,7 @@ class RegistrationController extends GetxController with BaseController {
 
   Future<void> userRegistration({required String userType}) async {
     final uri = Uri.parse(API.userBaseURL + API.userRegister);
+    print("baseUrl ${API.userBaseURL + API.userRegister}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'x-api-key': 'saibalaji@teckzy',

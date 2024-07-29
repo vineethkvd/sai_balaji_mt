@@ -39,7 +39,8 @@ import '../model/removecart.dart';
 import '../model/state_model.dart';
 import '../model/update_profile.dart';
 import '../view/edit_profile_bottomnav/my_address.dart';
-import '../view/myorder/order_detail.dart';
+import '../view/myorder/my_order.dart';
+
 
 class InitCon extends GetxController with BaseController {
   TextEditingController locationSearchController = TextEditingController();
@@ -586,10 +587,10 @@ class InitCon extends GetxController with BaseController {
     if (data['status'] == true) {
       orderdetaildata = myorderdetailFromJson(response);
       // Fluttertoast.showToast(msg: orderdetaildata!.data.items[0].proName);
-      Get.to(OrderDetail(),
-          transition: Transition.leftToRight,
-          duration: Duration(milliseconds: 300),
-          preventDuplicates: true);
+      // Get.to(MyOrderPage(),
+      //     transition: Transition.leftToRight,
+      //     duration: Duration(milliseconds: 300),
+      //     preventDuplicates: true);
     } else {
       Fluttertoast.showToast(msg: data['msg']);
     }

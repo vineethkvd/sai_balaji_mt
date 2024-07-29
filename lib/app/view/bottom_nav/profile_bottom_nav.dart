@@ -86,8 +86,7 @@ class ProfileBottomNav extends StatelessWidget {
             // My Orders section
             InkWell(
               onTap: () async {
-                await init.myorders();
-                Get.to(MyOrder());
+                Get.to(MyOrderPage());
               },
               child: Container(
                 padding: EdgeInsets.all(16.w),
