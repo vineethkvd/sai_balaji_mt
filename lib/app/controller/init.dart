@@ -247,11 +247,12 @@ class InitCon extends GetxController with BaseController {
   //
   //
   Addcart? addcartdata;
-  Future<void> addcart(proid) async {
+  Future<void> addcart(proid,{String qty="1"}) async {
     var userid = GetStorage().read('UserID').toString();
     var body = {
       "user_id": userid,
       "pro_id": proid,
+      "quantity":qty
     };
     print(body);
 

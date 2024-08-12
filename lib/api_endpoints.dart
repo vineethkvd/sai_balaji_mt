@@ -12,6 +12,8 @@ class API {
 
   //String subcategory = "list_sub_cat";
   String subcategory = "list_sub_cat";
+  String notification = "notification";
+
   String productbysub = "get_products";
   String catdetail = "product_details";
   String cart = "cart_list";

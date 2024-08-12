@@ -8,6 +8,7 @@ import 'package:purie_ui/app/common/common.dart';
 import 'package:purie_ui/app/controller/auth.dart';
 import 'package:purie_ui/app/view/drawer/drawer.dart';
 import 'package:purie_ui/app/view/home_screen/single_category.dart';
+import 'package:purie_ui/app/view/notification/view/notifications.dart';
 import 'package:purie_ui/app/view/product/product_detail.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../controller/init.dart';
@@ -115,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _key.currentState!.openDrawer();
             }, icon: Icon(Icons.menu)),
             actions: [IconButton(onPressed: () {
-              
+              Get.to(NotificationsPage(),transition: Transition.cupertino);
             }, icon: Icon(Icons.notifications,color: Colors.white,))],
             backgroundColor:  AppColor.mainColor,
             centerTitle: true,
@@ -374,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           await init.addcart(product?.proDetailsId);
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: AppColor.mainColor,
+                                          backgroundColor: AppColor.mainColor,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(20),
                                           ),

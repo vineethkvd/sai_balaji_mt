@@ -59,33 +59,20 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    CarouselSlider.builder(
-                      itemCount: init.catdetaildata!.images.length,
-                      itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            imageUrl: API().imagebaseURL +
-                                init.catdetaildata!.images[itemIndex].the0,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            placeholder: (context, url) =>
-                                Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                        );
-                      },
-                      options: CarouselOptions(
-                        height: MediaQuery.of(context).size.height / 3,
-                        viewportFraction: 1.0,
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 3),
-                        enableInfiniteScroll: true,
-                        aspectRatio: 2.0,
-                        enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {},
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: SizedBox(
+                        height: 300,
+                        child: CachedNetworkImage(
+                          imageUrl: API().imagebaseURL +
+                              init.catdetaildata!.images[0].the0,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          placeholder: (context, url) =>
+                              Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
                       ),
                     ),
                     SizedBox(height: 15),
@@ -230,10 +217,11 @@ class _ProductDetailState extends State<ProductDetail> {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () async {
-                registrationController.addToCart(
-                    proId: int.parse(
-                        "${init.catdetaildata!.data[0].proDetailsId}"),
-                    quantity: quantity);
+                // registrationController.addToCart(
+                //     proId: int.parse(
+                //         "${init.catdetaildata!.data[0].proDetailsId}"),
+                //     quantity: quantity);
+                await init.addcart(init.catdetaildata?.data[0].proDetailsId,qty: quantity.toString());
               },
               icon: const Icon(Icons.add_shopping_cart, color: Colors.white),
               label: Text(
@@ -245,7 +233,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: AppColor.mainColor,
+                backgroundColor: AppColor.mainColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),

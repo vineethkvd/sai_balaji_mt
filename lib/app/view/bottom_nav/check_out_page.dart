@@ -95,6 +95,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             child: InkWell(
                               onTap: () async {
                                 await initCon.chkAvailPinCode().then((_) {
+                                  setState(() {
+
+                                  });
                                   bool isAvailable =
                                   initCon.isPinCodeAvailable(
                                       initCon.chkPinCode.text);
@@ -140,6 +143,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                           .value
                                           .status ==
                                       false) {
+                                   Fluttertoast.showToast(msg: "No address found");
                                     if (registrationController
                                             .allDeliveryAddressModel
                                             .value
